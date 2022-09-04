@@ -42,6 +42,7 @@ func myArray() {
 func mySlice() {
 	//go 中还有一个类型叫切片(slice) 是引用类型，本质是为了解决数组定长问题
 	//切片可以自由的增加和减少元素
+	//由于切片是引用类型 要注意的是所有切片的变更 都会在原始的切片中提现，因为变量指向的是堆的引用地址
 
 	//定义方式 1
 	var myarrar1 []string
@@ -50,10 +51,24 @@ func mySlice() {
 
 	//定义方式2
 	var slice1 []int = make([]int, 10)
-	slice1 = append(slice1, 1)
-	slice1 = append(slice1, 2)
-
+	// slice1 = append(slice1, 1)
+	// slice1 = append(slice1, 2)
 	fmt.Println(slice1)
+
+	//切片取值用法 （前闭后开）
+	a := []int{76, 77, 78, 79, 80}
+	var b []int = a[1:4] //creates a slice from a[1] to a[3]   也就是索引为第一开始算  取4-1 个数 也就是 77 78 79
+
+	var c []int = a[:4]
+
+	var d []int = a[1:]
+
+	fmt.Println(b)
+	fmt.Println(c)
+	fmt.Println(d)
+
+	fmt.Printf("len=%d cap=%d slice=%v\n", len(a), cap(a), a)
+
 }
 
 //排序
