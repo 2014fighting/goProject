@@ -16,17 +16,26 @@ func main() {
 
 	// fmt.Println("x1 = ", x1) // 应该输出 "x1 = 4"
 	// fmt.Println("x = ", x)   // 应该输出 "x = 3"
-	var sliceMy []int
-	sliceMy = []int{4, 5, 7}
-	for _, v := range sliceMy {
-		fmt.Println(v)
-	}
 
-	myfunc5(sliceMy)
+	// var sliceMy []int
+	// sliceMy = []int{4, 5, 7}
+	// for _, v := range sliceMy {
+	// 	fmt.Println(v)
+	// }
 
-	for _, v := range sliceMy {
-		fmt.Println(v)
-	}
+	// myfunc5(sliceMy)
+
+	// for _, v := range sliceMy {
+	// 	fmt.Println(v)
+	// }
+
+	//boolRes := myfunc6()
+	//fmt.Println(boolRes)
+	//myfunc7()
+
+	//myfunc8()
+	res := myfunc9(fun1)
+	fmt.Println(res)
 }
 
 // 函数基本使用
@@ -66,4 +75,75 @@ func myfunc4(a int) int { // 请注意，
 func myfunc5(arg []int) []int { // 请注意，
 	arg[0] = 2 // 修改了a的值
 	return arg // 返回新值
+}
+
+// defer 使用 ,后进先出原则，应该打印1 4 2   3
+func myfunc6() bool {
+	a := 1
+	b := 2
+	c := 3
+	d := 4
+	defer fmt.Println(c)
+	fmt.Println(a)
+	defer fmt.Println(b)
+
+	fmt.Println(d)
+	return true
+}
+
+// defer 堆栈打印
+func myfunc7() {
+	name := "Naveen"
+	fmt.Printf("Orignal String: %s\n", string(name))
+	fmt.Printf("Reversed String: ")
+	for _, v := range []rune(name) {
+		defer fmt.Printf("%c", v)
+	}
+	fmt.Print("\n")
+	for _, v := range []rune("abckd") {
+		defer fmt.Printf("%c\n", v)
+	}
+}
+
+// 匿名函数
+func myfunc8() {
+	//匿名函数
+	func() {
+		fmt.Println("我是一个匿名函数。。")
+	}()
+
+	//匿名函数
+	fun3 := func() {
+		fmt.Println("我也是一个匿名函数。。")
+	}
+
+	fun3()
+
+	//定义带参数的匿名函数
+	func(a, b int) {
+		fmt.Println(a, b)
+	}(1, 2)
+
+	//定义一个带参数 并且带返回值的匿名函数
+	fmt.Println(func(a bool, b int) int {
+		fmt.Println(a, b)
+		return b
+	}(false, 4))
+}
+
+/*
+Go语言是支持函数式编程：
+1.将匿名函数作为另一个函数的参数，回调函数
+2.将匿名函数作为另一个函数的返回值，可以形成闭包结构。
+*/
+
+// 回调函数 定义了一个  你匿名函数作为参数的函数，这个参数就是回调函数
+// 这点使用跟js 类似，在c#中实现是用的委托
+func myfunc9(callback func(a int) int) int {
+	return callback(1)
+}
+
+func fun1(a int) int {
+	fmt.Printf("我是函数 fun1,传入参数%d \n", a)
+	return a + 1
 }
