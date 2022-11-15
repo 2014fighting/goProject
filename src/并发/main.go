@@ -1,7 +1,10 @@
 package main
 
-import mygoroutine "并发/goroutine"
+import (
+	mysync "并发/sync"
+)
 
 func main() {
-	mygoroutine.GoroutineTest()
+	//mygoroutine.GoroutineTest()
+	mysync.SyncTest()
 }
