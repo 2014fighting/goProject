@@ -13,6 +13,7 @@ var (
 	wg       sync.WaitGroup
 	counter  int64
 	shutdown int64
+	mutex    sync.Mutex
 )
 
 // https://blog.csdn.net/weixin_39616056/article/details/110385378
@@ -28,12 +29,18 @@ func SyncTest() {
 	// wg.Wait()
 	// fmt.Println(count)
 
-	go doWork("A")
-	go doWork("B")
-	time.Sleep(1 * time.Second)
-	//fmt.Println("Shutdown Now")
-	atomic.StoreInt64(&shutdown, 1)
-	wg.Wait()
+	wg.Add(2)
+	go incCounter(1)
+	go incCounter(2)
+	wg.Wait() //等待goroutine结束
+	fmt.Println(counter)
+
+	// go doWork("A")
+	// go doWork("B")
+	// time.Sleep(1 * time.Second)
+	// //fmt.Println("Shutdown Now")
+	// atomic.StoreInt64(&shutdown, 1)
+	// wg.Wait()
 }
 
 // 模拟享资源竞争的问题
@@ -47,15 +54,23 @@ func incCount() {
 	}
 }
 
+// 原子函数操作
 func incCounter(id int) {
 	defer wg.Done()
 	for count := 0; count < 2; count++ {
-		atomic.AddInt64(&counter, 1) //安全的对counter加1
-		runtime.Gosched()
+		//同一时刻只允许一个goroutine进入这个临界区
+		mutex.Lock()
+		{
+			value := counter
+			runtime.Gosched()
+			value++
+			counter = value
+		}
+		mutex.Unlock() //释放锁，允许其他正在等待的goroutine进入临界区
 	}
 }
 
-// 原子函数操作 sync包下面的 Atomic
+// sync包下面的 Atomic
 func doWork(name string) {
 	defer wg.Done()
 	for {
