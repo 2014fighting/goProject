@@ -7,7 +7,7 @@ func main() {
 }
 
 func myMap() {
-	//go 语言中的map 也是一个引用类型 类似与c#中 Dictionary  但是由于是非泛型所以更像是c#中的
+	//go 语言中的map 也是一个引用类型 类似与c#中 Dictionary  但是由于是非泛型所以更像是c#中的Hashtable
 	// go map 的底层实现也是 哈希表
 
 	// 声明变量，默认 map 是 nil 空对象会引发异常
